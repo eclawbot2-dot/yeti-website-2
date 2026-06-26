@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Progressive enhancement: scroll-reveal elements are hidden via inline
+   style and un-hidden by JS. If JS is disabled, force them visible so no
+   content is ever lost (also covers non-JS crawlers and headless renders). */
+@media (scripting: none) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+body {
+  @apply bg-paper-0 text-ink-800 font-sans antialiased;
+}
+
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid theme("colors.brand.500");
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.skip-link {
+  @apply sr-only;
+}
+.skip-link:focus {
+  @apply not-sr-only fixed left-4 top-4 z-[100] rounded-lg bg-brand-500 px-4 py-2 font-semibold text-white;
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-500 px-7 py-3.5 text-[15px] font-semibold tracking-tight text-white shadow-brand transition-all duration-200 hover:bg-brand-600 hover:-translate-y-0.5;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink-900/15 bg-white/70 px-7 py-3.5 text-[15px] font-semibold tracking-tight text-ink-900 transition-colors duration-200 hover:border-brand-400 hover:text-brand-600;
+  }
+  .btn-on-photo {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 py-3 text-[15px] font-semibold tracking-tight text-white backdrop-blur-sm transition-colors duration-200 hover:bg-white/20;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-brand-600;
+  }
+  .eyebrow-on-photo {
+    @apply inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-brand-300;
+  }
+  .section-heading {
+    @apply font-display text-3xl font-bold leading-[1.08] tracking-tight text-ink-900 sm:text-4xl md:text-[2.75rem];
+  }
+  .card {
+    @apply rounded-2xl border border-paper-200 bg-white shadow-card;
+  }
+}
+
+.hairline {
+  height: 1px;
+  background: linear-gradient(to right, transparent, theme("colors.paper.200"), transparent);
+}
