@@ -4,8 +4,10 @@
 export const SITE = {
   name: "YETI™ Tires",
   shortName: "YETI Tires",
-  domain: "yeti2.jahdev.com",
-  url: "https://yeti2.jahdev.com",
+  // Production host. yeti.jahdev.com is a staging alias of the same deploy;
+  // canonical always points at the real domain so staging never competes in search.
+  domain: "yetitires.com",
+  url: "https://yetitires.com",
   tagline: "Your Automotive Concierge. Built for the Road Ahead.",
   description:
     "YETI™ Tires is your automotive concierge — a members club that handles tire selection, pricing, shipping and install coordination for you, remotely. The best tires at the best price, no hassle.",

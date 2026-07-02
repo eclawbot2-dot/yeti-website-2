@@ -5,34 +5,40 @@ import { JOIN } from "@/lib/content";
 import { SITE, FORM_ENDPOINT } from "@/lib/config";
 
 export default function JoinForm() {
-  const [sent, setSent] = useState(false);
+  const [sent, setSent] = useState<false | "form" | "mailto">(false);
   const [form, setForm] = useState({ name: "", email: "", vehicle: "", message: "" });
 
   const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
+  function trackLead(method: "form" | "mailto") {
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "generate_lead", { method });
+    }
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (typeof window !== "undefined" && (window as any).gtag) {
-      (window as any).gtag("event", "generate_lead", { method: FORM_ENDPOINT ? "form" : "mailto" });
-    }
     if (FORM_ENDPOINT) {
       try {
-        await fetch(FORM_ENDPOINT, {
+        const res = await fetch(FORM_ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
           body: JSON.stringify(form),
         });
-        setSent(true);
+        if (!res.ok) throw new Error(String(res.status)); // non-OK falls through to mailto
+        trackLead("form");
+        setSent("form");
         return;
       } catch {
         /* fall through to mailto */
       }
     }
+    trackLead("mailto");
     const subject = encodeURIComponent("New YETI Tire Club inquiry");
     const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\nVehicle: ${form.vehicle}\n\n${form.message}`);
     window.location.href = `mailto:${SITE.email}?subject=${subject}&body=${body}`;
-    setSent(true);
+    setSent("mailto");
   }
 
   const inputCls =
@@ -47,12 +53,25 @@ export default function JoinForm() {
           </svg>
         </div>
         <p className="font-display text-lg font-semibold text-ink-900">{JOIN.success}</p>
+        {sent === "mailto" && (
+          // Honesty: the mailto path depends on the visitor's mail app actually
+          // sending. Give them a manual fallback so no lead is silently lost.
+          <p className="mt-3 text-sm text-ink-600">
+            If your email app didn&rsquo;t open, write to us directly at{" "}
+            <a href={`mailto:${SITE.email}`} className="font-semibold text-brand-600 hover:text-brand-500">
+              {SITE.email}
+            </a>
+            .
+          </p>
+        )}
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="card p-6 sm:p-8" noValidate>
+    // Native `required` validation stays ON (no `noValidate`) — otherwise an
+    // empty submit would fire the lead event and show success with no contact info.
+    <form onSubmit={onSubmit} className="card p-6 sm:p-8">
       <p className="mb-5 text-[15px] text-ink-600">{JOIN.formLead}</p>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>

@@ -73,7 +73,9 @@ export default function TireSelector() {
   }
 
   return (
-    <div className="card overflow-hidden p-6 sm:p-7">
+    // aria-live: each step swap (question -> question -> result) replaces the
+    // DOM node that held keyboard focus, so announce the new content politely.
+    <div className="card overflow-hidden p-6 sm:p-7" aria-live="polite">
       {/* progress */}
       <div className="mb-5 flex items-center justify-between">
         <span className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-brand-600">

@@ -66,7 +66,7 @@ const orgJsonLd = {
   email: SITE.email,
   slogan: SITE.tagline,
   foundingDate: String(SITE.established),
-  logo: `${SITE.url}/favicon.svg`,
+  logo: `${SITE.url}/apple-touch-icon.png`,
   image: `${SITE.url}/images/og.jpg`,
   sameAs: SOCIAL.filter((s) => s.href).map((s) => s.href as string),
   areaServed: "US",
@@ -78,6 +78,10 @@ const siteJsonLd = {
   name: SITE.name,
   url: SITE.url,
 };
+
+// Escape `<` so JSON-LD can never break out of its <script> tag, even if
+// config strings ever contain markup.
+const jsonLd = (o: object) => JSON.stringify(o).replace(/</g, "\\u003c");
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -92,11 +96,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(orgJsonLd) }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(siteJsonLd) }}
         />
         {GA_MEASUREMENT_ID && (
           <>

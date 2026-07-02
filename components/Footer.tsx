@@ -19,7 +19,7 @@ export default function Footer() {
           </div>
 
           <nav aria-label="Footer">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-white/40">Explore</h2>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-white/60">Explore</h2>
             <ul className="mt-4 space-y-2.5">
               {NAV.map((n) => (
                 <li key={n.href}>
@@ -32,7 +32,7 @@ export default function Footer() {
           </nav>
 
           <div>
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-white/40">Connect</h2>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-white/60">Connect</h2>
             <a href={`mailto:${SITE.email}`} className="mt-4 block text-sm text-brand-400 transition-colors hover:text-brand-300">
               {SITE.email}
             </a>
@@ -51,19 +51,21 @@ export default function Footer() {
                   </li>
                 ) : (
                   <li key={s.label}>
-                    <span className="cursor-default rounded-lg border border-white/10 px-3 py-1.5 text-xs text-white/30" title="Coming soon">
+                    {/* /55 not /30: meaningful placeholder text must clear WCAG AA
+                        on carbon-950 (fleet class #28 — opacity-stacked gray). */}
+                    <span className="cursor-default rounded-lg border border-white/10 px-3 py-1.5 text-xs text-white/55" title="Coming soon">
                       {s.label}
                     </span>
                   </li>
                 ),
               )}
             </ul>
-            <p className="mt-3 text-[11px] text-white/30">Social channels coming soon.</p>
+            <p className="mt-3 text-[11px] text-white/55">Social channels coming soon.</p>
           </div>
         </div>
 
         <div className="hairline mt-12 opacity-20" />
-        <div className="mt-6 flex flex-col items-start justify-between gap-3 text-xs text-white/40 sm:flex-row sm:items-center">
+        <div className="mt-6 flex flex-col items-start justify-between gap-3 text-xs text-white/55 sm:flex-row sm:items-center">
           <p>© {year} {SITE.shortName}. {FOOTER.rights}</p>
           <p>Your Automotive Concierge.</p>
         </div>

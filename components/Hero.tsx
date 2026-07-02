@@ -1,12 +1,13 @@
 import { HERO, FINDER } from "@/lib/content";
 import TireSelector from "./TireSelector";
+import HeroVideo from "./HeroVideo";
 
 export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
       {/* Background: road photo is the always-on base (LCP + mobile + reduced-motion
-          fallback). The looping drive video layers on top on larger screens only,
-          and is hidden when the user prefers reduced motion. */}
+          fallback). The looping drive video layers on top on larger screens only —
+          client-mounted (HeroVideo) so hidden-video users never download the mp4. */}
       <div className="absolute inset-0 -z-10">
         <img
           src="/images/hero-road.jpg"
@@ -15,18 +16,7 @@ export default function Hero() {
           fetchPriority="high"
           decoding="async"
         />
-        <video
-          className="absolute inset-0 hidden h-full w-full object-cover object-center md:block motion-reduce:!hidden"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster="/images/hero-road.jpg"
-          aria-hidden="true"
-        >
-          <source src="/videos/road.mp4" type="video/mp4" />
-        </video>
+        <HeroVideo />
         <div className="absolute inset-0 bg-gradient-to-r from-carbon-950/80 via-carbon-950/45 to-carbon-950/20" />
         <div className="absolute inset-0 bg-gradient-to-t from-carbon-950/70 via-transparent to-carbon-950/30" />
       </div>
