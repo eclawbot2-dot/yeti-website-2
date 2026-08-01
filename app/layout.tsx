@@ -49,7 +49,14 @@ export const metadata: Metadata = {
     images: ["/images/og.jpg"],
   },
   icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    // SVG first so capable browsers keep the crisp vector; the PNG-ICO covers
+    // legacy clients and the bare /favicon.ico that browsers request regardless
+    // of these tags (container-1 731cde7 pattern). `sizes: "any"` is load-bearing,
+    // not decoration: it keeps Chrome from preferring the raster .ico over the SVG.
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
     apple: "/apple-touch-icon.png",
   },
   manifest: "/site.webmanifest",

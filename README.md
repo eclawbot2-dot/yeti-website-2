@@ -25,6 +25,11 @@ DNS is on Cloudflare. Email for the domain is intentionally stripped
 - No backend. Lead form uses a real `mailto:` fallback until a form endpoint is set.
 - `scripts/check-site.mjs` (run in CI) enforces the honesty policy: canonical host,
   no fabricated social/brand/mailto destinations, branded 404, assets present.
+- Icons: `public/favicon.svg` is the source of truth; `public/favicon.ico`
+  (3-image PNG-ICO, 16/32/48, rasterized from that SVG) and
+  `public/apple-touch-icon.png` are derived. The `.ico` is required because
+  browsers request bare `/favicon.ico` regardless of any `<link>` tag — without
+  the file that request 404s. `check-site.mjs` asserts both are exported.
 
 ## Develop
 

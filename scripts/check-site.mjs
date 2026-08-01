@@ -63,6 +63,9 @@ for (const f of [
   'sitemap.xml',
   'robots.txt',
   'favicon.svg',
+  // Not redundant with favicon.svg: browsers request bare /favicon.ico whether
+  // or not a <link> advertises it, so a missing file here is a live 404.
+  'favicon.ico',
   'apple-touch-icon.png',
   'site.webmanifest',
   'images/og.jpg',
