@@ -8,10 +8,36 @@ drive video in the hero (photo base = LCP + mobile + reduced-motion fallback).
 
 One Vercel project (`yeti-website-2`) serves BOTH:
 
-- **yetitires.com** (+ `www` 308 → apex) — PRODUCTION. Deploys via
-  `vercel deploy --prod`.
-- **yeti.jahdev.com** — staging alias (domain pinned to `gitBranch: staging`;
-  historically pointed at a preview deployment via `vercel alias set`).
+- **yetitires.com** (+ `www` 308 → apex) — PRODUCTION.
+- **yeti.jahdev.com** — staging alias.
+
+### Deploying — read this before trusting a push
+
+**Git push alone deploys NOTHING.** The GitHub→Vercel webhook does not fire on
+this fleet, so `git push` leaves the live sites on the previous build with no
+error anywhere. Every deploy is manual:
+
+```bash
+# production (yetitires.com)
+vercel deploy --prod --token <vcp_… from openclaw-morgan2 TOOLS.md>
+
+# staging (yeti.jahdev.com)
+vercel deploy --token <…>                       # preview build
+vercel alias set <the-preview-url> yeti.jahdev.com
+```
+
+Then verify the LIVE host cache-busted (`curl "https://yetitires.com/?cb=$(date +%s)"`)
+and grep for the new content — a READY deployment is not proof the alias moved.
+
+`yeti.jahdev.com` carries a `gitBranch: staging` pin in the Vercel project, but
+**that pin has never produced a deployment** (zero builds with `ref=staging` in
+the project's history) — the domain has only ever been moved by `vercel alias set`
+against a preview. Keep the `staging` branch fast-forwarded to `main` so the pin
+is not misleading, but do not rely on it to ship.
+
+CI (`.github/workflows/ci.yml`) only builds + runs `check-site.mjs`; it never
+deploys. It still runs because this repo is public — Actions are disabled on the
+fleet's private repos.
 
 DNS is on Cloudflare. Email for the domain is intentionally stripped
 (SPF `-all`, DMARC reject) — do NOT "fix" that.
